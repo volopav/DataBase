@@ -6,14 +6,9 @@ body{
 
 table{
     width: 100%;
-    border: 2px solid;  
-    border-bottom: 0px solid;
-    border-right: 0px solid;
 }
 
 td{
-    border-right: 2px solid;
-    border-bottom: 2px solid;
     padding: 5px;
 }
 
@@ -21,12 +16,10 @@ div{
     width: 100%;
 }
 
-input{
-    width: 100%;
-    padding: 0px 20px;
-    font-size: 20px;
-    color: #000;
-    overflow: auto;
+
+button{
+    margin-right: 20px;
+    margin-top: 10px;
 }
 
 #wrraper{
@@ -37,14 +30,12 @@ input{
 
 #actionButtons{
     width: 100%;
-    background: none repeat scroll 0% 0% #999;
+    text-align: left;
+    margin:30px 5px;
 }
 
 .actionButton{
-    height: 40px;
-    margin: 10px;
-    color: rgba(6, 0, 255, 1);
-    font-size: 18px;
+    margin-right: 30px;
 }
 
 #dbOfHuman{
@@ -52,6 +43,25 @@ input{
 }
 
 #parentForm {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background: #999;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+}
+#alertForm{
+    background: none repeat scroll 0% 0% #FFF;
+    padding: 30px;
+    position: fixed;
+    top: 10px;
+    left: 33%;
+    color: #000;
+    width: 500px;
+    box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.5);
+}
+#parentAlertForm{
     height: 100%;
     width: 100%;
     position: fixed;

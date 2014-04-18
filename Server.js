@@ -5,7 +5,7 @@
 var express = require('express'),
     app = express(),
     restify = require('restify'),
-    taskSave = require('save')('human'),
+    userSave = require('save')('user'),
     server = restify.createServer({ name: 'my-api' });
 
 
@@ -16,40 +16,40 @@ server
 
 
 /**
-* Returns all tasks
+* Returns all users
 */
-server.get('/human', function (req, res, next) {
-  taskSave.find({}, function (error, tasks) {
-    res.send(tasks)
+server.get('/user', function (req, res, next) {
+  userSave.find({}, function (error, users) {
+    res.send(users)
   })
 });
 
 
 /**
-* Creates a new task with paramenters task, name, _id
+* Creates a new user with paramenters user, name, _id
 */
-server.post('/human', function (req, res, next) {    
-    taskSave.create(req.params, function (error, task) {
+server.post('/user', function (req, res, next) {    
+    userSave.create(req.params, function (error, user) {
         if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-        res.send(201, task)
+        res.send(201, user)
     })
 });
 
 /**
-* Updata status of  task by id
+* Updata status of  user by id
 */
-server.put('/human', function (req, res, next) {
-    taskSave.update( req.params, function (error, task) {
+server.put('/user', function (req, res, next) {
+    userSave.update( req.params, function (error, user) {
             if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
-            res.send(200, task);
+            res.send(200, user);
     });
 });
 
 /**
-*Delete  task by id
+*Delete  user by id
 */
-server.del('/human', function (req, res, next) {
-    taskSave.delete( req.params._id, function (error, task) {
+server.del('/user', function (req, res, next) {
+    userSave.delete( req.params._id, function (error, user) {
         if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
         res.send()
       })
