@@ -23,7 +23,7 @@ div{
 
 input{
     width: 100%;
-    padding: 10px 20px;
+    padding: 0px 20px;
     font-size: 20px;
     color: #000;
     overflow: auto;
@@ -64,7 +64,7 @@ input{
     background: none repeat scroll 0% 0% #FFF;
     padding: 30px;
     position: fixed;
-    top: 100px;
+    top: 10px;
     left: 33%;
     color: #000;
     width: 500px;
