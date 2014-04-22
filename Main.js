@@ -1,6 +1,7 @@
 (function($, undefined){
     var collectionOfUser,
-        userId;
+        userId,
+        form;
     /**
     * Called in case of error during request to the server.
     * @param {String} text. String for display.
@@ -22,8 +23,8 @@
     function createActionButtons(){
         var actionButtons = template(tActionButtons);
         $('#actionButtons').append(actionButtons);
-        $('#addUser').on('click', createAddForm);
-        $('#editUser').on('click', createUpdateForm);
+        $('#addUser').on('click', showAddForm);
+        $('#editUser').on('click', showUpdateForm);
         $('#delUser').on('click', deleteUser);
     }
 
@@ -40,109 +41,80 @@
             var colums = template(tColumOfTable, array[i]);
             row.append(colums)
             row.on('click', select);
-            row.on('dblclick', createUpdateForm);
             table.append(row);
         }
         $('#dbOfUser').append(table);
     }
 
-    function createAddForm(){
-        if($('#addForm').length){
-            $('#addForm').show(600);
-            $('#addForm').find('[id="yourFullName"]').focus().select();       
-        }
-        else{
-            var container = $('<div>').attr({
-            'id' : 'addForm'
-            });
-            var form = template(tForm, {enter : 'Add', esc : 'Cancel'});
-            container.append(form);
-            $('#wrraper').append(container);
-            $('#addForm').find('[id="buttonEnter"]').on('click', createUser);
-            $('#addForm').find('[id="buttonEsc"]').on('click', hideAddForm);
-            $('#addForm').find('[id="yourFullName"]').focus().select();
-            $('#addForm').hide();
-            $('#addForm').show(600);
-        }
+    function showAddForm(){
+        form.show(300,
+            function(){
+                $('#buttonEnter').unbind().on('click', createUser);
+                $('#buttonEnter').text('Add');
+            }
+        )
     }
 
-    function createUpdateForm(){
-        if($('#updateForm').length){
-            $('#updateForm').show(600);
-            $('#updateForm').find('[id="yourFullName"]').focus().select();       
-        }
-        else{
-            var container = $('<div>').attr({
-            'id' : 'updateForm'
-            });
-            var form = template(tForm, {enter : 'Update', esc : 'Cancel'});
-            container.append(form);
-            $('#wrraper').append(container);
-            $('#updateForm').find('[id="buttonEnter"]').on('click', updateUser);
-            $('#updateForm').find('[id="buttonEsc"]').on('click', hideUpdateForm);
-            $('#updateForm').find('[id="yourFullName"]').focus().select();
-            $('#updateForm').hide();
-            $('#updateForm').show(600);
-        }
-        setDataToForm();
-    }
-
-    function createUser(){
-        collectionOfUser.create(
-            {
-                name : $('#addForm').find('[id="yourFullName"]').val(),
-                age : $('#addForm').find('[id="yourAge"]').val(),
-                workPlace : $('#addForm').find('[id="yourWorkPlace"]').val(),
-                addres : $('#addForm').find('[id="yourAddres"]').val(),
-                tel : $('#addForm').find('[id="yourPhone"]').val(),
-                skype : $('#addForm').find('[id="yourSkype"]').val(),
-                email : $('#addForm').find('[id="yourEmail"]').val()
-            },
-            function(newUser){
-                $('#addForm').hide();
-                var row = $('<tr></tr>').attr({
-                    'data-id' : JSON.parse(newUser)._id
-                })
-                var user = template(tColumOfTable, JSON.parse(newUser));
-                row.append(user);
-                row.on('click', select);
-                row.on('dblclick', createUpdateForm);
-                $('#db').append(row);
-                clearForm();
-            },
-            error
-        );   
-    }
-
-    function updateUser(){
+    function showUpdateForm(){
         if(userId){
             var user = collectionOfUser.getElementById(userId);
-            collectionOfUser.update(
-                {
-                    _id : user._id,
-                    name : $('#updateForm').find('[id="yourFullName"]').val(),
-                    age : $('#updateForm').find('[id="yourAge"]').val(),
-                    workPlace : $('#updateForm').find('[id="yourWorkPlace"]').val(),
-                    addres : $('#updateForm').find('[id="yourAddres"]').val(),
-                    tel : $('#updateForm').find('[id="yourPhone"]').val(),
-                    skype : $('#updateForm').find('[id="yourSkype"]').val(),
-                    email : $('#updateForm').find('[id="yourEmail"]').val()
-                },
-                function(newUser){
-                    $('#updateForm').hide();
-                    $('tr[data-id='+userId +']').html('').html(template(tColumOfTable, JSON.parse(newUser)))
-                    $('tr[data-id='+userId +']').on('click', select);
-                    $('tr[data-id='+userId +']').on('dblclick', createUpdateForm);
-                    clearForm();
-                },
-                error
-            );  
+            setValueToForm(user);
+            form.show(300,
+                function(){
+                    $('#buttonEnter').unbind().on('click', updateUser);
+                    $('#buttonEnter').text('').text('Update');
+                }
+            )
         }
         else{
             var text = 'Please select a user from the list.';
             createFormAlert(text);
         }
     }
+    function getDateFromForm(){
+        var user = {};
+        $('input').each(
+            function(item){
+                user[$(this).attr('name')] = $(this).val();
+            }
+        )
+        return user;
+    }
+
+    function setValueToForm(obj){
+        for (key in obj){
+            $('input[name = "' + key + '"]').val(obj[key]);
+        }
+    }
+
+    function createUser(){
+        if($('input[name="name"]').val() != ''){
+            var user = getDateFromForm();
+            collectionOfUser.create(
+                user,
+                function(newUser){
+                    showNewRow(JSON.parse(newUser));
+                },
+                error
+            );   
+        }
+    }
+
+    function updateUser(){
+        var user = getDateFromForm();
+        user["_id"] = userId;
+            collectionOfUser.update(
+                user,
+                function(newUser){
+                    $('tr[data-id='+userId +']').html('').html(template(tColumOfTable, JSON.parse(newUser)))
+                    $('tr[data-id='+userId +']').on('click', select);
+                    hideForm();
+                    clearForm();
+                },
+                error
+            );  
+    }
+    
 
     function deleteUser(){
         if(userId){
@@ -161,31 +133,28 @@
         }
     }
 
-    function setDataToForm(){
-        var user = collectionOfUser.getElementById(userId);
-        name : $('#updateForm').find('[id="yourFullName"]').val(user.name);
-        age : $('#updateForm').find('[id="yourAge"]').val(user.age);
-        workPlace : $('#updateForm').find('[id="yourWorkPlace"]').val(user.workPlace);
-        addres : $('#updateForm').find('[id="yourAddres"]').val(user.addres);
-        tel : $('#updateForm').find('[id="yourPhone"]').val(user.tel);
-        skype : $('#updateForm').find('[id="yourSkype"]').val(user.skype);
-        email : $('#updateForm').find('[id="yourEmail"]').val(user.email);
-    }
-
-    function hideAddForm(){ 
-        $('#addForm').hide();
+    function hideForm(){ 
+        $('#parentForm').hide();
+        $('#form').hide();
         clearForm();
     }
 
-    function hideUpdateForm(){ 
-        $('#updateForm').hide();
-        clearForm();
-    }
 
     function clearForm(){
         $('input').val('');
     }
 
+    function showNewRow(obj){
+        var row = $('<tr></tr>').attr({
+            'data-id' : obj._id
+        })
+        var colums = template(tColumOfTable, obj);
+        row.append(colums);
+        row.on('click', select);
+        $('#db').append(row);
+        hideForm();
+        clearForm();
+    }
     function select(e){
         if(userId){
             $('tr[data-id='+ userId +']').css('background', 'none');
@@ -199,6 +168,10 @@
         createActionButtons();         
         collectionOfUser.load(
             function (data){
+                form = template(tForm);
+                $('#wrraper').append(form);
+                $('#buttonEsc').on('click', hideForm);
+                form.hide();
                 createTable(data);
             }
         );

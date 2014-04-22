@@ -2,8 +2,7 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
                          '<button id="editUser" class="btn btn-primary">Edit User</button>'+
                          '<button id="delUser" class="btn btn-primary">Delete User</button>',
 
-        tColumOfTable = 
-                            '<td id = "_id"><div>{{_id}}</div></td>'+
+        tColumOfTable = '<td id = "_id"><div>{{_id}}</div></td>'+
                             '<td id = "name"><div>{{name}}</div></td>'+
                             '<td id = "age"><div>{{age}}</div></td>'+
                             '<td id = "workPlace"><div>{{workPlace}}</div></td>'+
@@ -23,50 +22,36 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
                             '<td><div>E-mail</div></td>'+
                         '</tr>',
 
-        tForm  =  '<div id="parentForm"></div>'+
-                        '<div id="form">'+
-                            //'<form>'+
-                                '<div id = "row1">' +
-                                    '<div class = "nameOfRow">Your full name : </div>' +
-                                    '<input id = "yourFullName" class="form-control" type="text"  required = "true"></input>' + 
-                                '</div>'+
+        tForm  ='<div id = "parentForm"></div>'+
+                        '<div id = "form">'+
+                            '<form>'+
+                                '<label class = "nameOfRow">Your full name : </label>' +
+                                '<input class = "form-control"  type="text" name = "name"  required = "true"></input>' + 
 
-                                '<div id = "row2">' +
-                                    '<div  class = "nameOfRow">Your age : </div>' +
-                                    '<input id = "yourAge" class="form-control" type="number"></input>' + 
-                                '</div>'+
+                                '<label class = "nameOfRow">Your age : </label>' +
+                                '<input class = "form-control" type="number" name = "age"></input>' + 
 
-                                '<div id = "row3">' +
-                                    '<div  class = "nameOfRow">Your work place : </div>' +
-                                    '<input id = "yourWorkPlace" class="form-control" type="text"></input>' + 
-                                '</div>'+
+                                '<label class = "nameOfRow">Your work place : </label>' +
+                                '<input class = "form-control" type="text" name = "workPlace"></input>' + 
 
-                                '<div id = "row4">' +
-                                    '<div  class = "nameOfRow">Your addres : </div>' +
-                                    '<input id = "yourAddres" class="form-control" type="text"></input>' + 
-                                '</div>'+
+                                '<label class = "nameOfRow">Your addres : </label>' +
+                                '<input class = "form-control" type="text" name = "addres"></input>' + 
 
-                                '<div id = "row5">' +
-                                    '<div  class = "nameOfRow">Your phone : </div>' +
-                                    '<input id = "yourPhone" class="form-control" type="number"></input>' + 
-                                '</div>'+
+                                '<label class = "nameOfRow">Your phone : </label>' +
+                                '<input class = "form-control" type="number" name = "tel" required = "true"></input>' + 
 
-                                '<div id = "row6">' +
-                                    '<div  class = "nameOfRow">Your skype : </div>' +
-                                    '<input id = "yourSkype" class="form-control" type="text"></input>' + 
-                                '</div>'+
+                                '<label class = "nameOfRow">Your skype : </label>' +
+                                '<input class = "form-control" type="text" name = "skype"></input>' + 
 
-                                '<div id = "row7">' +
-                                    '<div  class = "nameOfRow">Your email : </div>' +
-                                    '<input id = "yourEmail" class="form-control" type="email" name="email"></input>' + 
-                                '</div>'+
+                                '<label class = "nameOfRow">Your email : </label>' +
+                                '<input class = "form-control" type="email" name = "email"  required = "true"></input>' + 
 
-                                '<button id="buttonEnter" class="btn btn-primary">{{enter}}</button>'+
-                                '<button id="buttonEsc" class="btn btn-primary">{{esc}}</button>'+
-                           // '</form>'+
+                                '<button id = "buttonEnter" class="btn btn-primary"></button>'+
+                                '<button id = "buttonEsc" class="btn btn-primary">Cancel</button>'+
+                            '</form>'+
                         '</div>',
 
-        tAlertForm = '<div id="parentAlertForm"></div>'+
+        tAlertForm ='<div id="parentAlertForm"></div>'+
                         '<div id="alertForm">'+
                             '<div> {{text}} </div>'+
                             '<button id="buttonOk" class="btn btn-primary">Ok</button>'+
