@@ -40,6 +40,7 @@
             var colums = template(tColumOfTable, array[i]);
             row.append(colums)
             row.on('click', select);
+            row.on('dblclick', createUpdateForm);
             table.append(row);
         }
         $('#dbOfUser').append(table);
@@ -105,6 +106,7 @@
                 var user = template(tColumOfTable, JSON.parse(newUser));
                 row.append(user);
                 row.on('click', select);
+                row.on('dblclick', createUpdateForm);
                 $('#db').append(row);
                 clearForm();
             },
@@ -130,6 +132,7 @@
                     $('#updateForm').hide();
                     $('tr[data-id='+userId +']').html('').html(template(tColumOfTable, JSON.parse(newUser)))
                     $('tr[data-id='+userId +']').on('click', select);
+                    $('tr[data-id='+userId +']').on('dblclick', createUpdateForm);
                     clearForm();
                 },
                 error
