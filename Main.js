@@ -87,8 +87,10 @@
         }
     }
 
-    function createUser(){
+    function createUser(e){
+        
         if($('input[name = "name"]').val() != '' && $('input[name = "tel"]').val() != '' && $('input[name = "email"]').val() != ''){
+            e.preventDefault();
             var user = getDateFromForm();
             collectionOfUser.create(
                 user,
@@ -100,9 +102,11 @@
         }
     }
 
-    function updateUser(){
+    function updateUser(e){
         var user = getDateFromForm();
         user["_id"] = userId;
+        if($('input[name = "name"]').val() != '' && $('input[name = "tel"]').val() != '' && $('input[name = "email"]').val() != ''){
+            e.preventDefault();
             collectionOfUser.update(
                 user,
                 function(newUser){
@@ -113,6 +117,7 @@
                 },
                 error
             );  
+        }
     }
     
 
