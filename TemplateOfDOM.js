@@ -24,8 +24,8 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
 
         tForm  ='<div id = "parentForm"></div>'+
                         '<div id = "form">'+
-                            '<form>'+
-                                '<label class = "nameOfRow">Your full name : </label>' +
+                            '<form id = "myForm">'+
+                                '<label class = "nameOfRow">Your full name  </label>' +
                                 '<input class = "form-control"  type="text" name = "name"  required = "true"></input>' + 
 
                                 '<label class = "nameOfRow">Your age : </label>' +

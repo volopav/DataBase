@@ -88,16 +88,14 @@
     }
 
     function createUser(){
-        if($('input[name="name"]').val() != ''){
-            var user = getDateFromForm();
-            collectionOfUser.create(
-                user,
-                function(newUser){
-                    showNewRow(JSON.parse(newUser));
-                },
-                error
-            );   
-        }
+        var user = getDateFromForm();
+        collectionOfUser.create(
+            user,
+            function(newUser){
+                showNewRow(JSON.parse(newUser));
+            },
+            error
+        );   
     }
 
     function updateUser(){
