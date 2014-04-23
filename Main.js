@@ -91,7 +91,6 @@
 
     function createUser(e){
         var val = valid();
-        console.log(val);
         if(val){
             var user = getDateFromForm();
             e.preventDefault();
@@ -214,10 +213,15 @@
 
     function valid(){
         var val = false;
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         if ($('input[name = "name"]').val() != '' && $('input[name = "tel"]').val() != '' && $('input[name = "email"]').val() != ''){
             if($('input[name = "name"]').val().length >= 4){
                 if($.isNumeric($('input[name = "tel"]').val())){
-                        val = true;
+                    if($.isNumeric($('input[name = "age"]').val()) || $('input[name = "age"]').val() ===''){
+                        if(emailReg.test( $('input[name = "email"]').val() ) ){
+                            val = true;
+                        }
+                    }
                 }
             }
         }
