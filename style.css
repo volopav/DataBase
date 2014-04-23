@@ -25,6 +25,7 @@ button{
 label{
     text-align: left;
     width: 100%;
+    border: none;
 }
 
 #wrraper{

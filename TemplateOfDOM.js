@@ -20,7 +20,7 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
                             '<td><div>E-mail</div></td>'+
                         '</tr>',
 
-        tForm  ='<div id = "parentForm"></div>'+
+        tForm  = '<div id = "parentForm"></div>'+
                         '<div id = "form">'+
                             '<form id = "myForm">'+
                                 '<label class = "nameOfRow">Your full name  </label>' +

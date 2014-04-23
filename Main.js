@@ -142,7 +142,8 @@
         }
     }
 
-    function hideForm(){ 
+    function hideForm(e){ 
+        e.preventDefault();
         $('#parentForm').hide();
         $('#form').hide();
         clearForm();
