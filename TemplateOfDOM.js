@@ -20,8 +20,8 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
                             '<td><div>E-mail</div></td>'+
                         '</tr>',
 
-        tForm  = '<div id = "parentForm"></div>'+
-                        '<div id = "form">'+
+        tForm  = '<div id = "parentForm" class = "parentForm"></div>'+
+                        '<div id = "form" class = "form">'+
                             '<form id = "myForm">'+
                                 '<label class = "nameOfRow">Your full name  </label>' +
                                 '<input class = "form-control"  type="text" name = "name" required = "true"></input>' + 
@@ -49,10 +49,14 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
                             '</form>'+
                         '</div>',
 
-        tAlertForm ='<div id="parentAlertForm"></div>'+
-                        '<div id="alertForm">'+
+        tAlertForm ='<div id="parentAlertForm" class = "parentForm"></div>'+
+                        '<div id="alertForm" class = "form">'+
                             '<div> {{text}} </div>'+
                             '<button id="buttonOk" class="btn btn-primary">Ok</button>'+
+                        '</div>',
+        tConfirmForm = '<div id="confirmParentForm" class = "parentForm"></div>'+
+                        '<div id="confirmForm" class = "form">'+
+                            '<div> You really want to remove this person from your list ?</div>'+
+                            '<button id="buttonYes" class="btn btn-primary">Yes</button>'+
+                            '<button id="buttonNo" class="btn btn-primary">No</button>'+
                         '</div>';
-
-

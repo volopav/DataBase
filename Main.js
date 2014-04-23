@@ -12,10 +12,10 @@
 
     function createFormAlert(string){
         $('#wrraper').append(template(tAlertForm, {text : string}));
-        $('#buttonOk').on('click', hideAlertForm);
+        $('#buttonOk').on('click', removeAlertForm);
     }
 
-    function hideAlertForm(){
+    function removeAlertForm(){
         $('#parentAlertForm').remove();
         $('#alertForm').remove();
     }
@@ -25,7 +25,7 @@
         $('#actionButtons').append(actionButtons);
         $('#addUser').on('click', showAddForm);
         $('#editUser').on('click', showUpdateForm);
-        $('#delUser').on('click', deleteUser);
+        $('#delUser').on('click', showDeleteForm);
     }
 
     function createTable(array){
@@ -34,21 +34,19 @@
             'class' : 'table'
         });
         table.append(template(tFirstRow));
+
         for (var i = 0; i<array.length; i++){
-            var row = $('<tr></tr>').attr({
-                'data-id' : array[i]._id
-            });
-            var colums = template(tColumOfTable, array[i]);
-            row.append(colums)
-            row.on('click', select);
+            var row = createNewRow(array[i]);
             table.append(row);
         }
         $('#dbOfUser').append(table);
+        $('body').on('keydown', removeUser);
     }
 
     function showAddForm(){
         form.show(300,
             function(){
+                $('input[name = "name"]').focus().select();
                 $('#buttonEnter').unbind().on('click', createUser);
                 $('#buttonEnter').text('Add');
                 validation();
@@ -62,6 +60,7 @@
             setValueToForm(user);
             form.show(300,
                 function(){
+                    $('input[name = "name"]').focus().select();
                     $('#buttonEnter').unbind().on('click', updateUser);
                     $('#buttonEnter').text('').text('Update');
                     validation();
@@ -73,20 +72,12 @@
             createFormAlert(text);
         }
     }
-    function getDateFromForm(){
-        var user = {};
-        $('input').each(
-            function(item){
-                user[$(this).attr('name')] = $(this).val();
-            }
-        )
-        return user;
-    }
 
-    function setValueToForm(obj){
-        for (key in obj){
-            $('input[name = "' + key + '"]').val(obj[key]);
-        }
+    function showDeleteForm(){
+        var form = template(tConfirmForm);
+        $('#wrraper').append(form);
+        $('#buttonYes').on('click', deleteUser);
+        $('#buttonNo').on('click', removeConfirmForm);
     }
 
     function createUser(e){
@@ -98,7 +89,9 @@
             collectionOfUser.create(
                 user,
                 function(newUser){
-                    showNewRow(JSON.parse(newUser));
+                   var row = createNewRow(JSON.parse(newUser));
+                    $('#db').append(row);
+                    hideForm();
                 },
                 error
             );   
@@ -117,15 +110,15 @@
                     $('tr[data-id='+userId +']').html('').html(template(tColumOfTable, JSON.parse(newUser)))
                     $('tr[data-id='+userId +']').on('click', select);
                     hideForm();
-                    clearForm();
                 },
                 error
             );  
         }
     }
-    
 
     function deleteUser(){
+        removeConfirmForm();
+
         if(userId){
             var user = collectionOfUser.getElementById(userId);
             collectionOfUser.remove(
@@ -142,28 +135,60 @@
         }
     }
 
-    function hideForm(e){ 
-        e.preventDefault();
+    function removeConfirmForm(){
+        $('#confirmParentForm').remove();
+        $('#confirmForm').remove();
+    }
+    function getDateFromForm(){
+        var user = {};
+        $('input').each(
+            function(item){
+                user[$(this).attr('name')] = $(this).val();
+            }
+        )
+        return user;
+    }
+
+    function setValueToForm(obj){
+        for (key in obj){
+            $('input[name = "' + key + '"]').val(obj[key]);
+        }
+    }
+
+    function removeUser(e){
+        if(e.keyCode === 46){
+            deleteUser();
+        }
+    }
+
+    function hideForm(){ 
         $('#parentForm').hide();
         $('#form').hide();
         clearForm();
     }
 
-
+    function cancelButton(e){
+        e.preventDefault();
+        hideForm();
+    }
+    function esc(e){
+        if(e.keyCode === 27){
+            hideForm();
+        }
+    }
     function clearForm(){
         $('input').val('');
     }
 
-    function showNewRow(obj){
+    function createNewRow(obj){
         var row = $('<tr></tr>').attr({
             'data-id' : obj._id
         })
         var colums = template(tColumOfTable, obj);
         row.append(colums);
         row.on('click', select);
-        $('#db').append(row);
-        hideForm();
-        clearForm();
+        row.on('dblclick', showUpdateForm);
+        return row;
     }
     function select(e){
         if(userId){
@@ -232,7 +257,8 @@
     function createForm(){
         form = template(tForm);
         $('#wrraper').append(form);
-        $('#buttonEsc').on('click', hideForm);
+        $('#buttonEsc').on('click', cancelButton);
+        $('#form').on('keydown', esc)
         form.hide();
     }
 
