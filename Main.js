@@ -51,6 +51,7 @@
             function(){
                 $('#buttonEnter').unbind().on('click', createUser);
                 $('#buttonEnter').text('Add');
+                validation();
             }
         )
     }
@@ -63,6 +64,7 @@
                 function(){
                     $('#buttonEnter').unbind().on('click', updateUser);
                     $('#buttonEnter').text('').text('Update');
+                    validation();
                 }
             )
         }
@@ -88,10 +90,12 @@
     }
 
     function createUser(e){
-        
-        if($('input[name = "name"]').val() != '' && $('input[name = "tel"]').val() != '' && $('input[name = "email"]').val() != ''){
-            e.preventDefault();
+        var val = valid();
+        console.log(val);
+        if(val){
             var user = getDateFromForm();
+            e.preventDefault();
+           // console.log(e.isDefaultPrevented());
             collectionOfUser.create(
                 user,
                 function(newUser){
@@ -99,13 +103,14 @@
                 },
                 error
             );   
-        }
+         }
     }
 
     function updateUser(e){
         var user = getDateFromForm();
         user["_id"] = userId;
-        if($('input[name = "name"]').val() != '' && $('input[name = "tel"]').val() != '' && $('input[name = "email"]').val() != ''){
+        var val = valid();
+        if(val){
             e.preventDefault();
             collectionOfUser.update(
                 user,
@@ -168,15 +173,70 @@
         userId = e.currentTarget.getAttribute('data-id');
     }
 
+    function validation(){
+        $("#myForm").validate({
+            rules : {
+                name : {
+                    required : true,
+                    minlength : 4,  
+                },
+                age : {
+                    number : true,
+                },
+                tel : {
+                    required : true,
+                    number : true,
+                },
+                email : {
+                    required : true,
+                    email : true,
+                },
+           },
+           messages : {
+                name : {
+                    required : "This field is required",
+                    minlength : "Username must be at least 4 characters",
+                },
+                age : {
+                    number : "You can use only numbers",
+                },
+                tel : {
+                    required : "This field is required",
+                    number : "You can use only numbers",
+                },
+                email : {
+                    required : "This field is required",
+                    email : "Wrong email format",
+                },
+            }
+        });
+    }
+
+    function valid(){
+        var val = false;
+        if ($('input[name = "name"]').val() != '' && $('input[name = "tel"]').val() != '' && $('input[name = "email"]').val() != ''){
+            if($('input[name = "name"]').val().length >= 4){
+                if($.isNumeric($('input[name = "tel"]').val())){
+                        val = true;
+                }
+            }
+        }
+        return val;
+    }
+
+    function createForm(){
+        form = template(tForm);
+        $('#wrraper').append(form);
+        $('#buttonEsc').on('click', hideForm);
+        form.hide();
+    }
+
     $(function(){
         collectionOfUser = new MyCollection('http://localhost:3000/user');
         createActionButtons();         
         collectionOfUser.load(
             function (data){
-                form = template(tForm);
-                $('#wrraper').append(form);
-                $('#buttonEsc').on('click', hideForm);
-                form.hide();
+                createForm();
                 createTable(data);
             }
         );

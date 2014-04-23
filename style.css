@@ -101,3 +101,8 @@ label{
 .firstRow{
     background: rgba(20, 219, 243, 1);
 }
+
+
+.error{
+  color: red;
+}
