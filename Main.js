@@ -1,7 +1,6 @@
 (function($, undefined){
-    var collectionOfUser,
-        userId,
-        form;
+    var collectionOfUser, userId, form, addForm, updateForm, confirmForm, warningForm;
+
     /**
     * Called in case of error during request to the server.
     * @param {String} text. String for display.
@@ -10,13 +9,23 @@
         console.log('Error is :' + text);
     }
 
+    /**
+    * Create buttons : 'Add', 'Update', 'Delete' .
+    * Set him function for create new user, update selected user, delete selected user
+    */
     function createActionButtons(){
         var actionButtons = template(tActionButtons);
         $('#actionButtons').append(actionButtons);
         $('#addUser').on('click', function(){
+            if(!addForm.form.find('button').length){
+                createAddForm();
+            }
             addForm.show(300);
         });
         $('#editUser').on('click', function(){
+            if(!updateForm.form.find('button').length){
+                createUpdateForm();
+            }
             if(userId){
                 updateForm.setValueForm(
                     collectionOfUser.getElementById(userId)
@@ -24,6 +33,9 @@
                 updateForm.show(300);
             }
             else{
+                if(!warningForm.form.find('button').length){
+                    createWarningForm();
+                }
                 warningForm.show(300);
             }
         });
@@ -32,6 +44,9 @@
                 updateForm.setValueForm(
                     collectionOfUser.getElementById(userId)
                 );
+                if(!confirmForm.form.find('button').length){
+                    createConfirmForm();
+                }
                 confirmForm.show(300);
             }
             else{
@@ -40,6 +55,11 @@
         });
     }
 
+    /**
+    * Create new row in table whicj contains a tade of user
+    * @param {Object} obj. Object which contains property of user.
+    * {name, age, workPlace, addres, tel, skype, email}
+    */
     function createNewRow(obj){
         var row = $('<tr></tr>').attr({
             'data-id' : obj._id
@@ -50,6 +70,10 @@
         return row;
     }
 
+    /**
+    * Create table which display all date about user. 
+    * @param {Array} array. Collection of users.
+    */
     function createTable(array){
         var table = $('<table></table>').attr({
             'id' : 'db',
@@ -64,7 +88,9 @@
         $('#dbOfUser').append(table);
     }
 
-
+    /**
+    * Create new user and display him
+    */
     function createUser(e){
         var val = addForm.form.find('#myForm').valid();
         if(val){
@@ -82,6 +108,9 @@
          }
     }
 
+    /**
+    * Update user and display him instead old.
+    */
     function updateUser(e){
         var user = updateForm.getValueForm();
         user["_id"] = userId;
@@ -100,17 +129,24 @@
         }
     }
 
+    /**
+    * Delete selected user.
+    */
     function deleteUser(){
         var user = collectionOfUser.getElementById(userId);
         collectionOfUser.remove(
             user,
             function(){
                 $('tr[data-id='+userId +']').remove();
+                confirmForm.hide();
             },
             error
         )
     }
 
+    /**
+    * Selected user from the list
+    */
     function select(e){
         if(userId){
             $('tr[data-id='+ userId +']').css('background', 'none');
@@ -119,6 +155,9 @@
         userId = e.currentTarget.getAttribute('data-id');
     }
 
+    /**
+    * Set validation rules and  messages
+    */
     function validation(){
         $("#myForm").validate({
             rules : {
@@ -158,7 +197,9 @@
         });
     }
 
-
+    /**
+    * Create form for add user
+    */
     function createAddForm(){
         addForm.appendForm(
             $('#wrraper'),
@@ -181,6 +222,9 @@
         validation();
     }
 
+    /**
+    * Create form for update selected user
+    */
     function createUpdateForm(){
         updateForm.appendForm(
             $('#wrraper'),
@@ -203,6 +247,9 @@
         validation();
     }
 
+    /**
+    * create form for confirm delete user
+    */
     function createConfirmForm(){
         confirmForm.appendForm(
             $('#wrraper'),
@@ -224,6 +271,9 @@
         );
     }
 
+    /**
+    * Create form for warning
+    */
     function createWarningForm(){
         warningForm.appendForm(
             $('#wrraper'),
@@ -239,21 +289,15 @@
         );
     }
 
-    function createAllForm(){
-        createAddForm();
-        createUpdateForm();
-        createConfirmForm();
-        createWarningForm();  
-    }
-
+    /**
+    * set forms and display date from server
+    */
     $(function(){
         collectionOfUser = new MyCollection('http://localhost:3000/user');
-
-        var addForm = new MyForm( tNewForm ),
-            updateForm = new MyForm( tNewForm ),
-            confirmForm = new MyForm( tConfirmForm ),
-            warningForm = new MyForm( tAlertForm );
-
+        addForm = new MyForm( tNewForm );
+        updateForm = new MyForm( tNewForm );
+        confirmForm = new MyForm( tConfirmForm );
+        warningForm = new MyForm( tAlertForm );
 
         createActionButtons(); 
         collectionOfUser.load(

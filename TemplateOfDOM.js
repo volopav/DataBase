@@ -1,7 +1,13 @@
+/**
+* templaet for create buttons
+*/
 var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User</button>'+
                          '<button id="editUser" class="btn btn-primary">Edit User</button>'+
                          '<button id="delUser" class="btn btn-primary">Delete User</button>',
 
+/**
+* templaet for create colums with date in row of table
+*/
         tColumOfTable = '<td id = "name"><div>{{name}}</div></td>'+
                             '<td id = "age"><div>{{age}}</div></td>'+
                             '<td id = "workPlace"><div>{{workPlace}}</div></td>'+
@@ -10,6 +16,9 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
                             '<td id = "skype"><div>{{skype}}</div></td>'+
                             '<td id = "email"><div>{{email}}</div></td>',
 
+/**
+* templaet for create names of colums
+*/
         tFirstRow = ' <tr>'+
                             '<td><div>Full Name</div></td>'+
                             '<td><div>Age</div></td>'+
@@ -20,16 +29,25 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
                             '<td><div>E-mail</div></td>'+
                         '</tr>',
 
+/**
+* templaet for create warning form
+*/
         tAlertForm ='<div id="parentAlertForm" class = "parentForm"></div>'+
                         '<div id="alertForm" class = "form">'+
-                            '<div>Please select a user from the list</div>'+
+                            '<div>Please select a user from the list<br></div>'+
                         '</div>',
 
+/**
+* templaet for create confirm form
+*/
         tConfirmForm = '<div id="confirmParentForm" class = "parentForm"></div>'+
                         '<div id="confirmForm" class = "form">'+
                             '<div> You really want to remove this user from the list?<br></div>'+
                         '</div>',
 
+/**
+* templaet for create add and update form
+*/
          tNewForm  = '<div id = "parentForm" class = "parentForm"></div>'+
                         '<div id = "form" class = "form">'+
                             '<form id = "myForm">'+
