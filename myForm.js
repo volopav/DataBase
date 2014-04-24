@@ -21,8 +21,10 @@
 
         this.show = function(speed){
             this.form.show(speed);
-            ((this.form.find('input'))[0]).focus();
-            ((this.form.find('input'))[0]).select();
+            if(this.form.find('input').length){
+                ((this.form.find('input'))[0]).focus();
+                ((this.form.find('input'))[0]).select();
+            }
         }
         this.hide = function(){
             this.form.hide();
@@ -51,15 +53,7 @@
             }
         }
     }
-
-   
-    var addForm = new MyForm(tNewForm);
-    var updateForm = new MyForm(tNewForm);
-
     window.MyForm = MyForm;
-    window.addForm = addForm;
-    window.updateForm = updateForm;
-
 }());
 
 

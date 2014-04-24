@@ -20,57 +20,17 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
                             '<td><div>E-mail</div></td>'+
                         '</tr>',
 
-        tForm  = '<div id = "parentForm" class = "parentForm"></div>'+
-                        '<div id = "form" class = "form">'+
-                            '<form id = "myForm">'+
-                                '<label class = "nameOfRow">Your full name  </label>' +
-                                '<input class = "form-control"  type="text" name = "name" required = "true"></input>' + 
-
-                                '<label class = "nameOfRow">Your age : </label>' +
-                                '<input class = "form-control" type="number" name = "age"></input>' + 
-
-                                '<label class = "nameOfRow">Your work place : </label>' +
-                                '<input class = "form-control" type="text" name = "workPlace"></input>' + 
-
-                                '<label class = "nameOfRow">Your addres : </label>' +
-                                '<input class = "form-control" type="text" name = "addres"></input>' + 
-
-                                '<label class = "nameOfRow">Your phone : </label>' +
-                                '<input class = "form-control" type="number" name = "tel"></input>' + 
-
-                                '<label class = "nameOfRow">Your skype : </label>' +
-                                '<input class = "form-control" type="text" name = "skype"></input>' + 
-
-                                '<label class = "nameOfRow">Your email : </label>' +
-                                '<input class = "form-control" type="email" name = "email"></input>' + 
-
-                                '<button id = "buttonEnter" class="btn btn-primary"></button>'+
-                                '<button id = "buttonEsc" class="btn btn-primary">Cancel</button>'+
-                            '</form>'+
-                        '</div>',
-
         tAlertForm ='<div id="parentAlertForm" class = "parentForm"></div>'+
                         '<div id="alertForm" class = "form">'+
-                            '<div> {{text}} </div>'+
-                            '<button id="buttonOk" class="btn btn-primary">Ok</button>'+
+                            '<div>Please select a user from the list</div>'+
                         '</div>',
 
         tConfirmForm = '<div id="confirmParentForm" class = "parentForm"></div>'+
                         '<div id="confirmForm" class = "form">'+
-                            '<div> {{messages}}</div>'+
-                            '<button id="buttonYes" class="btn btn-primary">Yes</button>'+
-                            '<button id="buttonNo" class="btn btn-primary">No</button>'+
-                        '</div>';
+                            '<div> You really want to remove this user from the list?<br></div>'+
+                        '</div>',
 
-
-
-
-
-
-
-
-
-                        var tNewForm  = '<div id = "parentForm" class = "parentForm"></div>'+
+         tNewForm  = '<div id = "parentForm" class = "parentForm"></div>'+
                         '<div id = "form" class = "form">'+
                             '<form id = "myForm">'+
                                 '<label class = "nameOfRow">Your full name  </label>' +
@@ -94,7 +54,5 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
                                 '<label class = "nameOfRow">Your email : </label>' +
                                 '<input class = "form-control" type="email" name = "email"></input>' + 
 
-                                // '<button id = "buttonEnter" class="btn btn-primary"></button>'+
-                                // '<button id = "buttonEsc" class="btn btn-primary">Cancel</button>'+
                             '</form>'+
                         '</div>';

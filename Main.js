@@ -10,16 +10,6 @@
         console.log('Error is :' + text);
     }
 
-    function createFormAlert(string){
-        $('#wrraper').append(template(tAlertForm, {text : string}));
-        $('#buttonOk').on('click', removeAlertForm);
-    }
-
-    function removeAlertForm(){
-        $('#parentAlertForm').remove();
-        $('#alertForm').remove();
-    }
-
     function createActionButtons(){
         var actionButtons = template(tActionButtons);
         $('#actionButtons').append(actionButtons);
@@ -27,12 +17,37 @@
             addForm.show(300);
         });
         $('#editUser').on('click', function(){
-            updateForm.setValueForm(
-                collectionOfUser.getElementById(userId)
-            );
-            updateForm.show(300);
+            if(userId){
+                updateForm.setValueForm(
+                    collectionOfUser.getElementById(userId)
+                );
+                updateForm.show(300);
+            }
+            else{
+                warningForm.show(300);
+            }
         });
-        $('#delUser').on('click', showDeleteForm);
+        $('#delUser').on('click', function(){
+            if(userId){
+                updateForm.setValueForm(
+                    collectionOfUser.getElementById(userId)
+                );
+                confirmForm.show(300);
+            }
+            else{
+                warningForm.show(300);
+            }
+        });
+    }
+
+    function createNewRow(obj){
+        var row = $('<tr></tr>').attr({
+            'data-id' : obj._id
+        })
+        var colums = template(tColumOfTable, obj);
+        row.append(colums);
+        row.on('click', select);
+        return row;
     }
 
     function createTable(array){
@@ -49,13 +64,6 @@
         $('#dbOfUser').append(table);
     }
 
-
-    function showDeleteForm(){
-        var form = template(tConfirmForm, {messages : 'Please select a user from the list.'});
-        $('#wrraper').append(form);
-        $('#buttonYes').on('click', deleteUser);
-        $('#buttonNo').on('click', removeConfirmForm);
-    }
 
     function createUser(e){
         var val = addForm.form.find('#myForm').valid();
@@ -93,38 +101,16 @@
     }
 
     function deleteUser(){
-        removeConfirmForm();
-
-        if(userId){
-            var user = collectionOfUser.getElementById(userId);
-            collectionOfUser.remove(
-                user,
-                function(){
-                    $('tr[data-id='+userId +']').remove();
-                },
-                error
-            )
-        }
-        else{
-            var text = 'Please select a user from the list.';
-            createFormAlert(text);
-        }
+        var user = collectionOfUser.getElementById(userId);
+        collectionOfUser.remove(
+            user,
+            function(){
+                $('tr[data-id='+userId +']').remove();
+            },
+            error
+        )
     }
 
-    function removeConfirmForm(){
-        $('#confirmParentForm').remove();
-        $('#confirmForm').remove();
-    }
-
-    function createNewRow(obj){
-        var row = $('<tr></tr>').attr({
-            'data-id' : obj._id
-        })
-        var colums = template(tColumOfTable, obj);
-        row.append(colums);
-        row.on('click', select);
-        return row;
-    }
     function select(e){
         if(userId){
             $('tr[data-id='+ userId +']').css('background', 'none');
@@ -217,20 +203,63 @@
         validation();
     }
 
+    function createConfirmForm(){
+        confirmForm.appendForm(
+            $('#wrraper'),
+            [
+                {
+                    id : 'yes',
+                    class : 'btn btn-primary',
+                    name : 'Yes',
+                    action : deleteUser
+                },
+                {
+                    id : 'no',
+                    class : 'btn btn-primary',
+                    name : 'No',
+                    action : function(e){e.preventDefault();confirmForm.hide();}
+                }
+            ],
+            'div'
+        );
+    }
+
+    function createWarningForm(){
+        warningForm.appendForm(
+            $('#wrraper'),
+            [
+                {
+                    id : 'ok',
+                    class : 'btn btn-primary',
+                    name : 'Ok',
+                    action : function(e){e.preventDefault();warningForm.hide();}
+                }
+            ],
+            'div'
+        );
+    }
+
+    function createAllForm(){
+        createAddForm();
+        createUpdateForm();
+        createConfirmForm();
+        createWarningForm();  
+    }
+
     $(function(){
         collectionOfUser = new MyCollection('http://localhost:3000/user');
 
+        var addForm = new MyForm( tNewForm ),
+            updateForm = new MyForm( tNewForm ),
+            confirmForm = new MyForm( tConfirmForm ),
+            warningForm = new MyForm( tAlertForm );
 
-        createAddForm();
-        createUpdateForm();
-        createActionButtons();         
+
+        createActionButtons(); 
         collectionOfUser.load(
             function (data){
-               // createForm();
                 createTable(data);
             }
-        );  
-
-           
+        );       
     });
 })(jQuery); 
