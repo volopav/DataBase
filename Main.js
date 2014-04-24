@@ -23,8 +23,15 @@
     function createActionButtons(){
         var actionButtons = template(tActionButtons);
         $('#actionButtons').append(actionButtons);
-        $('#addUser').on('click', showAddForm);
-        $('#editUser').on('click', showUpdateForm);
+        $('#addUser').on('click', function(){
+            addForm.show(300);
+        });
+        $('#editUser').on('click', function(){
+            updateForm.setValueForm(
+                collectionOfUser.getElementById(userId)
+            );
+            updateForm.show(300);
+        });
         $('#delUser').on('click', showDeleteForm);
     }
 
@@ -40,58 +47,27 @@
             table.append(row);
         }
         $('#dbOfUser').append(table);
-        $('body').on('keydown', removeUser);
     }
 
-    function showAddForm(){
-        form.show(300,
-            function(){
-                $('input[name = "name"]').focus().select();
-                $('#buttonEnter').unbind().on('click', createUser);
-                $('#buttonEnter').text('Add');
-                validation();
-            }
-        )
-    }
-
-    function showUpdateForm(){
-        if(userId){
-            var user = collectionOfUser.getElementById(userId);
-            setValueToForm(user);
-            form.show(300,
-                function(){
-                    $('input[name = "name"]').focus().select();
-                    $('#buttonEnter').unbind().on('click', updateUser);
-                    $('#buttonEnter').text('').text('Update');
-                    validation();
-                }
-            )
-        }
-        else{
-            var text = 'Please select a user from the list.';
-            createFormAlert(text);
-        }
-    }
 
     function showDeleteForm(){
-        var form = template(tConfirmForm);
+        var form = template(tConfirmForm, {messages : 'Please select a user from the list.'});
         $('#wrraper').append(form);
         $('#buttonYes').on('click', deleteUser);
         $('#buttonNo').on('click', removeConfirmForm);
     }
 
     function createUser(e){
-        var val = valid();
+        var val = addForm.form.find('#myForm').valid();
         if(val){
-            var user = getDateFromForm();
+            var user = addForm.getValueForm();
             e.preventDefault();
-           // console.log(e.isDefaultPrevented());
             collectionOfUser.create(
                 user,
                 function(newUser){
                    var row = createNewRow(JSON.parse(newUser));
                     $('#db').append(row);
-                    hideForm();
+                    addForm.hide();
                 },
                 error
             );   
@@ -99,9 +75,9 @@
     }
 
     function updateUser(e){
-        var user = getDateFromForm();
+        var user = updateForm.getValueForm();
         user["_id"] = userId;
-        var val = valid();
+        var val = updateForm.form.find('#myForm').valid();
         if(val){
             e.preventDefault();
             collectionOfUser.update(
@@ -109,7 +85,7 @@
                 function(newUser){
                     $('tr[data-id='+userId +']').html('').html(template(tColumOfTable, JSON.parse(newUser)))
                     $('tr[data-id='+userId +']').on('click', select);
-                    hideForm();
+                    updateForm.hide();
                 },
                 error
             );  
@@ -139,46 +115,6 @@
         $('#confirmParentForm').remove();
         $('#confirmForm').remove();
     }
-    function getDateFromForm(){
-        var user = {};
-        $('input').each(
-            function(item){
-                user[$(this).attr('name')] = $(this).val();
-            }
-        )
-        return user;
-    }
-
-    function setValueToForm(obj){
-        for (key in obj){
-            $('input[name = "' + key + '"]').val(obj[key]);
-        }
-    }
-
-    function removeUser(e){
-        if(e.keyCode === 46){
-            deleteUser();
-        }
-    }
-
-    function hideForm(){ 
-        $('#parentForm').hide();
-        $('#form').hide();
-        clearForm();
-    }
-
-    function cancelButton(e){
-        e.preventDefault();
-        hideForm();
-    }
-    function esc(e){
-        if(e.keyCode === 27){
-            hideForm();
-        }
-    }
-    function clearForm(){
-        $('input').val('');
-    }
 
     function createNewRow(obj){
         var row = $('<tr></tr>').attr({
@@ -187,7 +123,6 @@
         var colums = template(tColumOfTable, obj);
         row.append(colums);
         row.on('click', select);
-        row.on('dblclick', showUpdateForm);
         return row;
     }
     function select(e){
@@ -237,40 +172,65 @@
         });
     }
 
-    function valid(){
-        var val = false;
-        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-        if ($('input[name = "name"]').val() != '' && $('input[name = "tel"]').val() != '' && $('input[name = "email"]').val() != ''){
-            if($('input[name = "name"]').val().length >= 4){
-                if($.isNumeric($('input[name = "tel"]').val())){
-                    if($.isNumeric($('input[name = "age"]').val()) || $('input[name = "age"]').val() ===''){
-                        if(emailReg.test( $('input[name = "email"]').val() ) ){
-                            val = true;
-                        }
-                    }
+
+    function createAddForm(){
+        addForm.appendForm(
+            $('#wrraper'),
+            [
+                {
+                    id : 'add',
+                    class : 'btn btn-primary',
+                    name : 'Add',
+                    action : createUser
+                },
+                {
+                    id : 'cancel',
+                    class : 'btn btn-primary',
+                    name : 'Cancel',
+                    action : function(e){e.preventDefault();addForm.hide();}
                 }
-            }
-        }
-        return val;
+            ],
+            '#myForm'
+        );
+        validation();
     }
 
-    function createForm(){
-        form = template(tForm);
-        $('#wrraper').append(form);
-        $('#buttonEsc').on('click', cancelButton);
-        $('#form').on('keydown', esc)
-        form.hide();
+    function createUpdateForm(){
+        updateForm.appendForm(
+            $('#wrraper'),
+            [
+                {
+                    id : 'update',
+                    class : 'btn btn-primary',
+                    name : 'Update',
+                    action : updateUser
+                },
+                {
+                    id : 'esc',
+                    class : 'btn btn-primary',
+                    name : 'Cancel',
+                    action : function(e){e.preventDefault();updateForm.hide();}
+                }
+            ],
+            '#myForm'
+        );
+        validation();
     }
 
     $(function(){
         collectionOfUser = new MyCollection('http://localhost:3000/user');
+
+
+        createAddForm();
+        createUpdateForm();
         createActionButtons();         
         collectionOfUser.load(
             function (data){
-                createForm();
+               // createForm();
                 createTable(data);
             }
-        );
-        
+        );  
+
+           
     });
 })(jQuery); 
