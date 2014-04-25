@@ -8,6 +8,21 @@ var express = require('express'),
     userSave = require('save')('user'),
     server = restify.createServer({ name: 'my-api' });
 
+     userSave.create(
+        {
+            name : 'Rostyslav Paslavskyy',
+            login : 'admin',
+            password : 'admin',
+            workPlace : 'SoftServe',
+            addres : 'Lviv ',
+            tel : '0992363934',
+            skype : 'S-a-c-h-o-k1',
+            email : 'pas.ros.bor@gmail.com',
+            logged :false,
+        },
+        function(){}
+      );
+
 
 
 server
@@ -29,11 +44,34 @@ server.get('/user', function (req, res, next) {
 * Creates a new user with paramenters user, name, _id
 */
 server.post('/user', function (req, res, next) {    
-    userSave.create(req.params, function (error, user) {
+  userSave.find({ login : req.params.login }, function (error, users) {
+    if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
+    if(users.length === 0){
+        userSave.create(req.params, function (error, user) {
         if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
         res.send(201, user)
-    })
+      });
+    }
+    else{
+        res.send(501);
+    }
+  });
 });
+
+
+
+
+server.post('/loginAndPassword', function (req, res, next){
+        userSave.find(req.params, function(error, users){
+            if(users.length > 0){
+                res.send(users);
+            }
+            else{
+                res.send(502);
+            }
+        });
+    }
+)
 
 /**
 * Updata status of  user by id

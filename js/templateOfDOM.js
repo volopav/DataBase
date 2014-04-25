@@ -3,8 +3,7 @@
 */
 var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User</button>'+
                          '<button id="editUser" class="btn btn-primary">Edit User</button>'+
-                         '<button id="delUser" class="btn btn-primary">Delete User</button>'+
-                         '<button id="loggedOut" class="btn btn-primary">Logged out</button>',
+                         '<button id="delUser" class="btn btn-primary">Delete User</button>',
 
 /**
 * templaet for create colums with date in row of table
@@ -58,13 +57,13 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
                                 '<input class = "form-control"  type="text" name = "name"></input>' + 
 
                                 '<label class = "nameOfRow">Your login : </label>' +
-                                '<input class = "form-control"  name = "login"></input>' + 
+                                '<input class = "form-control" type = "text"  name = "login"></input>' + 
 
                                 '<label class = "nameOfRow">Your password : </label>' +
-                                '<input class = "form-control" id = "password"  name = "password"></input>' + 
+                                '<input class = "form-control" id = "password" type ="password"  name = "password"></input>' + 
 
                                 '<label class = "nameOfRow">Repeat your password : </label>' +
-                                '<input class = "form-control"  name = "c_password"></input>' + 
+                                '<input class = "form-control" type ="password" name = "c_password"></input>' + 
 
                                 '<label class = "nameOfRow">Your work place : </label>' +
                                 '<input class = "form-control" type="text" name = "workPlace"></input>' + 
@@ -92,7 +91,7 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
                                 '<input class = "form-control"  name = "login"></input>' + 
 
                                 '<label class = "nameOfRow">Your password : </label>' +
-                                '<input class = "form-control" id = "password"  name = "password"></input>' + 
+                                '<input class = "form-control" id = "password" type = "password"  name = "password"></input>' + 
 
                             '</form>'+
                         '</div>';

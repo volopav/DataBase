@@ -41,7 +41,7 @@
          	        {
                         if(typeof(callbackError) === 'function')
          	            {
-                            callbackError(xhr.statusText);
+                            callbackError(xhr.status);
                         }
                         else
                         {

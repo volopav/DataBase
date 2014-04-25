@@ -36,9 +36,9 @@
 			var that = this;
 			reqRes(
 				that.url,
-				function(task){ 
-	                that.collection.push(JSON.parse(task));
-	                callback(task);
+				function(data){ 
+	                that.collection.push(JSON.parse(data));
+	                callback(JSON.parse(data));
 	            },
 	            errorCallback,
 	            {
@@ -72,10 +72,10 @@
 			var that = this;
 			reqRes(
 				that.url,
-				function(newTask){ 
-					var task = JSON.parse(newTask);
-	                that.changeInCollection(task);
-	                callback(newTask);
+				function(newData){ 
+					var data = JSON.parse(newData);
+	                that.changeInCollection(data);
+	                callback(data);
 	            },
 	            errorCallback,
 	            {
