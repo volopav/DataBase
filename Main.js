@@ -1,5 +1,16 @@
 (function($, undefined){
-    var collectionOfUser, userId, form, addForm, updateForm, confirmForm, warningForm;
+    var collectionOfUser, userId, form, addForm, updateForm, confirmForm, warningForm, loginForm,
+        admin = {
+            name : 'Rostyslav Paslavskyy',
+            login : 'admin',
+            password : 'admin',
+            workPlace : 'SoftServe',
+            addres : 'Lviv ',
+            tel : '0992363934',
+            skype : 'S-a-c-h-o-k1',
+            email : 'pas.ros.bor@gmail.com',
+            logged :false,
+        };
 
     /**
     * Called in case of error during request to the server.
@@ -53,6 +64,7 @@
                 warningForm.show(300);
             }
         });
+        $('#loggedOut').on('click', logout);
     }
 
     /**
@@ -145,6 +157,81 @@
     }
 
     /**
+    * log out the user and give him status logged= false, hide all date show login form.
+    */
+    function logout(){
+        for (var i = 0 ; i < collectionOfUser.collection.length; i++){
+                if(collectionOfUser.collection[i].logged === true){
+                    collectionOfUser.collection[i].logged = false;
+                    collectionOfUser.update(
+                        collectionOfUser.collection[i],
+                        function(){
+                            $('#actionButtons').html('');
+                            $('#dbOfUser').html('');
+                            loginForm.show();
+                        },
+                        error
+                    );
+                }
+            }
+    }
+
+    /**
+    * check if someone of users is login 
+    */
+    function isLogged (){
+        var islogged = false;
+       for (var i = 0 ; i < collectionOfUser.collection.length; i++){
+            if(collectionOfUser.collection[i].logged === true){
+                islogged = true;
+            }
+       }
+       return islogged;
+    }
+
+    /**
+    * checking if login and password is exist and do some action
+    */
+    function checkPassword(e){
+        var userName = loginForm.form.find('input[name="login"]').val(),
+            password = loginForm.form.find('input[name="password"]').val(),
+            users = collectionOfUser.getFilteredCollection({login : userName}),
+            successfully = true;
+
+        for (var i = 0; i < users.length; i++){
+            if(users[i].password = password){
+                e.preventDefault();
+                if(users[i].login === 'admin'){
+                    createActionButtons(); 
+                    createTable(collectionOfUser.collection);
+                }
+                else{
+                    var button = $('<button></buttton>').attr({
+                        'id' : 'logout',
+                        'class' : 'btn btn-primary'
+                    });
+                    button.text('Logged out');
+                    button.on('click', logout);
+                    $('#actionButtons').append(button);
+                    createTable(users);
+                }
+                successfully = false;
+                users[i].logged = true;
+                collectionOfUser.update(
+                    users[i],
+                    function(){},
+                    error
+                );
+            }
+        } 
+
+        if(successfully){
+            loginForm.form.find('#form').text('incorrectly entered password or login');
+        }
+
+        loginForm.hide();
+    }
+    /**
     * Selected user from the list
     */
     function select(e){
@@ -158,15 +245,21 @@
     /**
     * Set validation rules and  messages
     */
-    function validation(){
-        $("#myForm").validate({
+    function validation(forma){
+        forma.find("#myForm").validate({
             rules : {
                 name : {
                     required : true,
                     minlength : 4,  
                 },
-                age : {
-                    number : true,
+                password: { 
+                    required: true,
+                    minlength: 5,
+                }, 
+                c_password: { 
+                    required: true, 
+                    equalTo:  forma.find("#password"), 
+                    minlength: 5,
                 },
                 tel : {
                     required : true,
@@ -177,13 +270,20 @@
                     email : true,
                 },
            },
+
            messages : {
                 name : {
                     required : "This field is required",
                     minlength : "Username must be at least 4 characters",
                 },
-                age : {
-                    number : "You can use only numbers",
+                password: { 
+                    required: "This field is required",
+                    minlength: "Minimum length of password is five characters",
+                },
+                c_password: { 
+                    required: "This field is required",
+                    equalTo: "Your passwords do not match",
+                    minlength: "Minimum length of password is five characters",
                 },
                 tel : {
                     required : "This field is required",
@@ -201,6 +301,7 @@
     * Create form for add user
     */
     function createAddForm(){
+        
         addForm.appendForm(
             $('#wrraper'),
             [
@@ -214,12 +315,15 @@
                     id : 'cancel',
                     class : 'btn btn-primary',
                     name : 'Cancel',
-                    action : function(e){e.preventDefault();addForm.hide();}
+                    action : function(e){
+                        e.preventDefault();
+                        addForm.hide();
+                    }
                 }
             ],
             '#myForm'
         );
-        validation();
+        validation(addForm.form);
     }
 
     /**
@@ -239,12 +343,15 @@
                     id : 'esc',
                     class : 'btn btn-primary',
                     name : 'Cancel',
-                    action : function(e){e.preventDefault();updateForm.hide();}
+                    action : function(e){
+                        e.preventDefault();
+                        updateForm.hide();
+                    }
                 }
             ],
             '#myForm'
         );
-        validation();
+        validation(updateForm.form);
     }
 
     /**
@@ -264,7 +371,10 @@
                     id : 'no',
                     class : 'btn btn-primary',
                     name : 'No',
-                    action : function(e){e.preventDefault();confirmForm.hide();}
+                    action : function(e){
+                        e.preventDefault();
+                        confirmForm.hide();
+                    }
                 }
             ],
             'div'
@@ -282,11 +392,41 @@
                     id : 'ok',
                     class : 'btn btn-primary',
                     name : 'Ok',
-                    action : function(e){e.preventDefault();warningForm.hide();}
+                    action : function(e){
+                        e.preventDefault();
+                        warningForm.hide();
+                    }
                 }
             ],
             'div'
         );
+    }
+    /**
+    * Create form for login
+    */
+    function createLoginForm(){
+        loginForm.appendForm(
+            $('#wrraper'),
+            [
+                {
+                    id : 'login',
+                    class : 'btn btn-primary',
+                    name : 'Login',
+                    action : checkPassword
+                },
+                {
+                    id : 'don"tLogin',
+                    class : 'btn btn-primary',
+                    name : 'Cancel',
+                    action : function(e){
+                        e.preventDefault();
+                        loginForm.hide();
+                    }
+                }
+            ],
+            '#myForm'
+        );
+        validation(loginForm.form);
     }
 
     /**
@@ -298,12 +438,32 @@
         updateForm = new MyForm( tNewForm );
         confirmForm = new MyForm( tConfirmForm );
         warningForm = new MyForm( tAlertForm );
-
-        createActionButtons(); 
+        loginForm = new MyForm( tLoginForm );
         collectionOfUser.load(
-            function (data){
-                createTable(data);
+            function(data){
+                console.log('All data from the server successfully loaded');
+                if(isLogged()){
+                    createActionButtons();
+                    createTable(data);
+                }
+                else{
+                    var adminCreated = collectionOfUser.getFilteredCollection(admin);
+                    if(adminCreated.length === 0){
+                        collectionOfUser.create(
+                            admin,
+                            function(){
+                                console.log('Admin user created successfully');
+                                adminCreated = false;
+                            },
+                            error
+                        ); 
+                    }
+                    if(!(isLogged())){
+                        createLoginForm();
+                        loginForm.show();  
+                    } 
+                }
             }
-        );       
+        );  
     });
 })(jQuery); 

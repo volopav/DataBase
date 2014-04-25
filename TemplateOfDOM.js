@@ -3,13 +3,15 @@
 */
 var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User</button>'+
                          '<button id="editUser" class="btn btn-primary">Edit User</button>'+
-                         '<button id="delUser" class="btn btn-primary">Delete User</button>',
+                         '<button id="delUser" class="btn btn-primary">Delete User</button>'+
+                         '<button id="loggedOut" class="btn btn-primary">Logged out</button>',
 
 /**
 * templaet for create colums with date in row of table
 */
         tColumOfTable = '<td id = "name"><div>{{name}}</div></td>'+
-                            '<td id = "age"><div>{{age}}</div></td>'+
+                            '<td id = "age"><div>{{login}}</div></td>'+
+                            '<td id = "age"><div>{{password}}</div></td>'+
                             '<td id = "workPlace"><div>{{workPlace}}</div></td>'+
                             '<td id = "addres"><div>{{addres}}</div></td>'+
                             '<td id = "tel"><div>{{tel}}</div></td>'+
@@ -21,7 +23,8 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
 */
         tFirstRow = ' <tr>'+
                             '<td><div>Full Name</div></td>'+
-                            '<td><div>Age</div></td>'+
+                            '<td><div>Login</div></td>'+
+                            '<td><div>Password</div></td>'+
                             '<td><div>Work Place</div></td>'+
                             '<td><div>Addres</div></td>'+
                             '<td><div>Phone</div></td>'+
@@ -48,14 +51,20 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
 /**
 * templaet for create add and update form
 */
-         tNewForm  = '<div id = "parentForm" class = "parentForm"></div>'+
+        tNewForm  = '<div id = "parentForm" class = "parentForm"></div>'+
                         '<div id = "form" class = "form">'+
                             '<form id = "myForm">'+
                                 '<label class = "nameOfRow">Your full name  </label>' +
-                                '<input class = "form-control"  type="text" name = "name" required = "true"></input>' + 
+                                '<input class = "form-control"  type="text" name = "name"></input>' + 
 
-                                '<label class = "nameOfRow">Your age : </label>' +
-                                '<input class = "form-control" type="number" name = "age"></input>' + 
+                                '<label class = "nameOfRow">Your login : </label>' +
+                                '<input class = "form-control"  name = "login"></input>' + 
+
+                                '<label class = "nameOfRow">Your password : </label>' +
+                                '<input class = "form-control" id = "password"  name = "password"></input>' + 
+
+                                '<label class = "nameOfRow">Repeat your password : </label>' +
+                                '<input class = "form-control"  name = "c_password"></input>' + 
 
                                 '<label class = "nameOfRow">Your work place : </label>' +
                                 '<input class = "form-control" type="text" name = "workPlace"></input>' + 
@@ -71,6 +80,19 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
 
                                 '<label class = "nameOfRow">Your email : </label>' +
                                 '<input class = "form-control" type="email" name = "email"></input>' + 
+
+                            '</form>'+
+                        '</div>',
+
+        tLoginForm  = '<div id = "parentForm" class = "parentForm"></div>'+
+                        '<div id = "form" class = "form">'+
+                            '<form id = "myForm">'+
+
+                                '<label class = "nameOfRow">Your login : </label>' +
+                                '<input class = "form-control"  name = "login"></input>' + 
+
+                                '<label class = "nameOfRow">Your password : </label>' +
+                                '<input class = "form-control" id = "password"  name = "password"></input>' + 
 
                             '</form>'+
                         '</div>';

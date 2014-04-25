@@ -127,8 +127,7 @@
         * @returns {Object}  element of collection.
         */
 		this.getElementById = function( id ){
-			for( var i = 0 ; i < this.collection.length; i++)
-            { 
+			for( var i = 0 ; i < this.collection.length; i++){ 
                 if(this.collection[i]._id === id)
                 {
                    	return this.collection[i];
