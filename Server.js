@@ -5,8 +5,15 @@
 var express = require('express'),
     app = express(),
     restify = require('restify'),
-    userSave = require('save')('user'),
+   // userSave = require('save')('user'),
     server = restify.createServer({ name: 'my-api' });
+
+    var save = require('save') // npm install save
+  , saveJson = require('..')
+
+// Create a save object and pass in a saveJson engine.
+var userSave = save('user', { engine: saveJson('user.json') })
+
 
      userSave.create(
         {
@@ -29,13 +36,20 @@ server
   .use(restify.fullResponse())
   .use(restify.bodyParser())
 
+function filter(array){
+    array.map(function (item){
+        item.login = '';
+        return item;
+    });
+    return array;
+}
 
 /**
 * Returns all users
 */
 server.get('/user', function (req, res, next) {
   userSave.find({}, function (error, users) {
-    res.send(users)
+    res.send(filter(users));
   })
 });
 
@@ -66,7 +80,7 @@ server.post('/user', function (req, res, next) {
 server.post('/loginAndPassword', function (req, res, next){
         userSave.find(req.params, function(error, users){
             if(users.length > 0){
-                res.send(users);
+                res.send(users[0]);
             }
             else{
                 res.send(502);

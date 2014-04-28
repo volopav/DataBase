@@ -183,6 +183,7 @@
                     collectionOfUser.update(
                         collectionOfUser.collection[i],
                         function(){
+                            $('#onSite').remove();
                             $('#actionButtons').html('');
                             $('#dbOfUser').html('');
                         },
@@ -210,6 +211,7 @@
     */
     function checkPassword(e){
         if (isLogged){
+
             logout();
         }
 
@@ -223,10 +225,14 @@
                     login : userName,
                     password : password,
                 },
-                function (users){
+                function (user){
                     loginForm.hide();
-                    console.log(users[0].login);
-                    if(users[0].login === 'admin'){
+                    var onSite = $('<div></div>').attr({
+                        'id' : 'onSite',
+                    });
+                    onSite.text('Welcome,' + user.name + ' on our site');
+                    $('body').append(onSite);
+                    if(user.login === 'admin'){
                         collectionOfUser.load(
                             function(data){
                                 createActionButtons();
@@ -238,9 +244,9 @@
                     else{
                         createTable(users);
                     }
-                    users[0].logged = true;
+                    user.logged = true;
                     collectionOfUser.update(
-                        users[0],
+                        user,
                         function(){},
                         error
                     );
@@ -372,7 +378,7 @@
                     name : 'Cancel',
                     action : function(e){
                         e.preventDefault();
-                        addForm.hide();
+                        registrationForm.hide();
                     }
                 }
             ],
@@ -505,7 +511,7 @@
             }
         );
         $('#registration').on('click', function(){
-            if(!addForm.form.find('button').length){
+            if(!registrationForm.form.find('button').length){
                 createRegistrationForm();
             }
             registrationForm.show(300);
