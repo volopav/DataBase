@@ -7,6 +7,7 @@
 , "dependencies":
   { "restify": "~2.6.0",
   	"save": "0.0.19",
-  	"express": "3.0"
+  	"express": "3.0",
+  	"save-json":"0.2.0"
   }
 }
