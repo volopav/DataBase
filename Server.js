@@ -41,7 +41,7 @@ server.get('/user', function (req, res, next) {
 
 
 /**
-* Creates a new user with paramenters user, name, _id
+* Creates a new user with paramenters user, name, _id,  if a user does not exist
 */
 server.post('/user', function (req, res, next) {    
   userSave.find({ login : req.params.login }, function (error, users) {
@@ -60,7 +60,9 @@ server.post('/user', function (req, res, next) {
 
 
 
-
+/**
+* Checks whether the user exists. then validates the password
+*/
 server.post('/loginAndPassword', function (req, res, next){
         userSave.find(req.params, function(error, users){
             if(users.length > 0){

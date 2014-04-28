@@ -352,7 +352,10 @@
         validation(addForm.form);
     }
 
-     function createRegistrationForm(){
+    /**
+    * Create form for registration user
+    */
+    function createRegistrationForm(){
         
         registrationForm.appendForm(
             $('#wrraper'),
