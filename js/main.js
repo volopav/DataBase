@@ -36,6 +36,7 @@
                 createUpdateForm();
             }
             if(userId){
+                console.log(userId);
                 updateForm.setValueForm(
                     collectionOfUser.getElementById(userId)
                 );
@@ -72,8 +73,8 @@
     */
     function createNewRow(obj){
         var row = $('<tr></tr>').attr({
-            'data-id' : obj._id
-        })
+            'data-id' : obj.id
+        });
         var colums = template(tColumOfTable, obj);
         row.append(colums);
         row.on('click', select);
@@ -186,40 +187,39 @@
     * checking if login and password is exist and do some action
     */
     function checkPassword(e){
-
+        logout();
         e.preventDefault();
         loginForm.form.find('label[class = "error"]').remove();
         var userName = loginForm.form.find('input[name="login"]').val(),
             password = loginForm.form.find('input[name="password"]').val();
 
-            loginAndPassword.create(
-                {
-                    login : userName,
-                    password : password,
-                },
-                function (user){
-                    loginForm.hide();
-                    createActionButtons();
+        loginAndPassword.create(
+            {
+                login : userName,
+                password : password,
+            },
+            function (user){
+                loginForm.hide();
+                createActionButtons();
+                var onSite = $('<div></div>').attr({
+                    'id' : 'onSite',
+                });
+                $('body').append(onSite);
+
+                if( user.length > 0 ){
+                    $('#onSite').text('Welcome,' + user[0].name + ' on our site');
+                       createTable(user);
+                }
+                else{
+                $('#onSite').text('Welcome,' + user.name + ' on our site');
+                    $('#addUser').remove();
+                    $('#delUser').remove();
                     createTable([]);
-
-                    var onSite = $('<div></div>').attr({
-                        'id' : 'onSite',
-                    });
-                    $('body').append(onSite);
-
-                    if( user.length > 0 ){
-                        $('#onSite').text('Welcome,' + user[0].name + ' on our site');
-                        for(var i = 0; i < user.length; i++){
-                            $('#db').append( createNewRow(user[i]) ); 
-                        }
-                    }
-                    else{
-                        $('#onSite').text('Welcome,' + user.name + ' on our site');
-                        $('#db').append( createNewRow(user) ); 
-                    }
-                },
-                error
-            );     
+                    $('#db').append( createNewRow(user) ); 
+                }
+            },
+            error
+        );     
     }
     /**
     * Selected user from the list

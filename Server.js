@@ -5,17 +5,11 @@
 var express = require('express'),
     app = express(),
     restify = require('restify'),
-
-   // userSave = require('save')('user'),
-    server = restify.createServer({ name: 'my-api' });
-
-    var save = require('save') // npm install save
-  , saveJson = require('save-json');
-    var _ = require('lodash');
-
-// Create a save object and pass in a saveJson engine.
-var userSave = save('user', { engine: saveJson('user.json') });
-
+    server = restify.createServer({ name: 'my-api' }),
+    save = require('save'),
+    saveJson = require('save-json'),
+    _ = require('lodash'),
+    userSave = save('user', { engine: saveJson('user.json') });
 
      userSave.create(
         {
@@ -59,16 +53,6 @@ function filter(array){
 }
 
 /**
-* Returns all users
-*/
-// server.get('/user', function (req, res, next) {
-//     userSave.find({}, function (error, users) {
-//         res.send(filter(users));
-//     });
-// });
-
-
-/**
 * Creates a new user with paramenters user, name, _id,  if a user does not exist
 */
 server.post('/user', function (req, res, next) {    
@@ -93,20 +77,21 @@ server.post('/user', function (req, res, next) {
 */
 server.post('/loginAndPassword', function (req, res, next){
         userSave.find(req.params, function (error, users){
-            if(users[0].login === 'admin' && users[0].password === 'admin'){
-              userSave.find({}, function (error, users) {
-                    var clonUsers = _.clone(users); 
-                    res.send(filter(clonUsers));
-                });
-            }
-            else{
-                if(typeof(users) ==='undefined'){
-                    res.send(502); 
+                if(users && users.length > 0){
+                    if(users[0].login === 'admin' && users[0].password === 'admin'){
+                      userSave.find({}, function (error, users) {
+                            var clonUsers = _.cloneDeep(users); 
+                            res.send(filter(clonUsers));
+                        });
+                    }
+                    else{
+                     res.send(users[0]);
+                    }
                 }
                 else{
-                    res.send(users[0]);
+                   res.send(502); 
                 }
-            }
+            
         });
     }
 )
