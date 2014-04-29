@@ -5,14 +5,16 @@
 var express = require('express'),
     app = express(),
     restify = require('restify'),
+
    // userSave = require('save')('user'),
     server = restify.createServer({ name: 'my-api' });
 
     var save = require('save') // npm install save
-  , saveJson = require('save-json')
+  , saveJson = require('save-json');
+    var _ = require('lodash');
 
 // Create a save object and pass in a saveJson engine.
-var userSave = save('user', { engine: saveJson('user.json') })
+var userSave = save('user', { engine: saveJson('user.json') });
 
 
      userSave.create(
@@ -25,7 +27,19 @@ var userSave = save('user', { engine: saveJson('user.json') })
             tel : '0992363934',
             skype : 'S-a-c-h-o-k1',
             email : 'pas.ros.bor@gmail.com',
-            logged :false,
+        },
+        function(){}
+      );
+      userSave.create(
+        {
+            name : 'Igor Paslavskyy',
+            login : 'IgorKo',
+            password : 'igor123',
+            workPlace : 'SoftServe',
+            addres : 'Lviv ',
+            tel : '0509984827',
+            skype : 'IgorKo',
+            email : 'IGOR@gmail.com',
         },
         function(){}
       );
@@ -47,30 +61,29 @@ function filter(array){
 /**
 * Returns all users
 */
-server.get('/user', function (req, res, next) {
-  userSave.read({}, function (error, users) {
-    res.send(filter(users));
-  })
-});
+// server.get('/user', function (req, res, next) {
+//     userSave.find({}, function (error, users) {
+//         res.send(filter(users));
+//     });
+// });
 
 
 /**
 * Creates a new user with paramenters user, name, _id,  if a user does not exist
 */
 server.post('/user', function (req, res, next) {    
-    // userSave.find(req.params.login, function (error, users) {
-    //     console.log('typeof == ' + typeof(users));
-    //     if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
-    //     if(users.length === 0){
-            userSave.create(req.params, function (error, user) {
+    userSave.find({login : req.params.login}, function (error, users) {
+       // if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
+        if(users && users.length > 0){
+            res.send(501);
+        }
+        else{
+             userSave.create(req.params, function (error, user) {
                 if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
                 res.send(201, user)
             });
-        //  }
-        // else{
-        //     res.send(501);
-        // }
-    // });
+        }
+    });
 });
 
 
@@ -79,12 +92,20 @@ server.post('/user', function (req, res, next) {
 * Checks whether the user exists. then validates the password
 */
 server.post('/loginAndPassword', function (req, res, next){
-        userSave.find(req.params, function(error, users){
-            if(users.length > 0){
-                res.send(users[0]);
+        userSave.find(req.params, function (error, users){
+            if(users[0].login === 'admin' && users[0].password === 'admin'){
+              userSave.find({}, function (error, users) {
+                    var clonUsers = _.clone(users); 
+                    res.send(filter(clonUsers));
+                });
             }
             else{
-                res.send(502);
+                if(typeof(users) ==='undefined'){
+                    res.send(502); 
+                }
+                else{
+                    res.send(users[0]);
+                }
             }
         });
     }

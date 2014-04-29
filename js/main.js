@@ -177,43 +177,15 @@
     * log out the user and give him status logged= false, hide all date show login form.
     */
     function logout (){
-        for (var i = 0 ; i < collectionOfUser.collection.length; i++){
-                if(collectionOfUser.collection[i].logged === true){
-                    collectionOfUser.collection[i].logged = false;
-                    collectionOfUser.update(
-                        collectionOfUser.collection[i],
-                        function(){
-                            $('#onSite').remove();
-                            $('#actionButtons').html('');
-                            $('#dbOfUser').html('');
-                        },
-                        error
-                    );
-                }
-            }
-    }
-
-    /**
-    * check if someone of users is login 
-    */
-    function isLogged (){
-        var islogged = false;
-       for (var i = 0 ; i < collectionOfUser.collection.length; i++){
-            if(collectionOfUser.collection[i].logged === true){
-                islogged = true;
-            }
-       }
-       return islogged;
+        $('#onSite').remove();
+        $('#actionButtons').html('');
+        $('#dbOfUser').html('');
     }
 
     /**
     * checking if login and password is exist and do some action
     */
     function checkPassword(e){
-        if (isLogged){
-
-            logout();
-        }
 
         e.preventDefault();
         loginForm.form.find('label[class = "error"]').remove();
@@ -227,30 +199,24 @@
                 },
                 function (user){
                     loginForm.hide();
+                    createActionButtons();
+                    createTable([]);
+
                     var onSite = $('<div></div>').attr({
                         'id' : 'onSite',
                     });
-                    onSite.text('Welcome,' + user.name + ' on our site');
                     $('body').append(onSite);
-                    if(user.login === 'admin'){
-                        collectionOfUser.load(
-                            function(data){
-                                createActionButtons();
-                                createTable(data);
-                                console.log('All data from the server successfully loaded');
-                            }
-                        );
+
+                    if( user.length > 0 ){
+                        $('#onSite').text('Welcome,' + user[0].name + ' on our site');
+                        for(var i = 0; i < user.length; i++){
+                            $('#db').append( createNewRow(user[i]) ); 
+                        }
                     }
                     else{
-                        createTable(users);
+                        $('#onSite').text('Welcome,' + user.name + ' on our site');
+                        $('#db').append( createNewRow(user) ); 
                     }
-                    user.logged = true;
-                    collectionOfUser.update(
-                        user,
-                        function(){},
-                        error
-                    );
-                    
                 },
                 error
             );     
