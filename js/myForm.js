@@ -75,7 +75,9 @@
             var user = {};
             this.form.find('input').each(
                 function(item){
-                    user[$(this).attr('name')] = $(this).val();
+                    if(($(this).attr('name')) != 'c_password'){
+                        user[$(this).attr('name')] = $(this).val();
+                    }
                 }
             )
             return user;

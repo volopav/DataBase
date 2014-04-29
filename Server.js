@@ -9,7 +9,7 @@ var express = require('express'),
     server = restify.createServer({ name: 'my-api' });
 
     var save = require('save') // npm install save
-  , saveJson = require('..')
+  , saveJson = require('save-json')
 
 // Create a save object and pass in a saveJson engine.
 var userSave = save('user', { engine: saveJson('user.json') })
@@ -38,7 +38,7 @@ server
 
 function filter(array){
     array.map(function (item){
-        item.login = '';
+        item.password = '';
         return item;
     });
     return array;
@@ -48,7 +48,7 @@ function filter(array){
 * Returns all users
 */
 server.get('/user', function (req, res, next) {
-  userSave.find({}, function (error, users) {
+  userSave.read({}, function (error, users) {
     res.send(filter(users));
   })
 });
@@ -58,18 +58,19 @@ server.get('/user', function (req, res, next) {
 * Creates a new user with paramenters user, name, _id,  if a user does not exist
 */
 server.post('/user', function (req, res, next) {    
-  userSave.find({ login : req.params.login }, function (error, users) {
-    if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
-    if(users.length === 0){
-        userSave.create(req.params, function (error, user) {
-        if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-        res.send(201, user)
-      });
-    }
-    else{
-        res.send(501);
-    }
-  });
+    // userSave.find(req.params.login, function (error, users) {
+    //     console.log('typeof == ' + typeof(users));
+    //     if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
+    //     if(users.length === 0){
+            userSave.create(req.params, function (error, user) {
+                if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+                res.send(201, user)
+            });
+        //  }
+        // else{
+        //     res.send(501);
+        // }
+    // });
 });
 
 

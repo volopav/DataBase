@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Rostyslav Paslavskyy",
+    "login": "admin",
+    "password": "admin",
+    "workPlace": "SoftServe",
+    "addres": "Lviv ",
+    "tel": "0992363934",
+    "skype": "S-a-c-h-o-k1",
+    "email": "pas.ros.bor@gmail.com",
+    "logged": true,
+    "id": 1
+  },
+  {
+    "name": "Rostyslav Paslavskyy",
+    "login": "admin",
+    "password": "admin",
+    "workPlace": "SoftServe",
+    "addres": "Lviv ",
+    "tel": "0992363934",
+    "skype": "S-a-c-h-o-k1",
+    "email": "pas.ros.bor@gmail.com",
+    "logged": false,
+    "id": 2
+  }
+]
