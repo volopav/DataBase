@@ -1,4 +1,4 @@
-(function(){
+define(['logic'], function(reqRes) {
 
     /**
     * Creates object MyCollection.
@@ -158,8 +158,8 @@
             return result;
         };
     }
-    window.MyCollection = MyCollection;
-}());
+    return MyCollection ;
+});
 
 
 

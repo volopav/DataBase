@@ -1,4 +1,4 @@
-(function ()
+define(function ()
 {
     /**
     * Creates a request to the server
@@ -71,6 +71,8 @@
     /**
     *  Global functions.
     */
-    window.reqRes = reqRes;
-    window.template = template;
-}())
+    return {
+        reqRes : reqRes,
+        template : template
+    }
+});

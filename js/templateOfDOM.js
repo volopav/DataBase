@@ -1,3 +1,4 @@
+define(function(){
 /**
 * templaet for create buttons
 */
@@ -95,3 +96,14 @@ var tActionButtons = '<button id="addUser"  class="btn btn-primary">Add new User
 
                             '</form>'+
                         '</div>';
+
+    return {
+        tActionButtons : tActionButtons,
+        tColumOfTable : tColumOfTable,
+        tFirstRow : tFirstRow,
+        tAlertForm : tAlertForm,
+        tConfirmForm : tConfirmForm,
+        tNewForm : tNewForm,
+        tLoginForm : tLoginForm
+    }
+});

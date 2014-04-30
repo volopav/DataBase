@@ -1,4 +1,6 @@
-(function($, undefined){
+define(['myForm', 'MyCollection', 'templateOfDOM'], 
+    function ( MyCollection, MyForm,  tActionButtons, tColumOfTable, tFirstRow, tAlertForm, tConfirmForm, tNewForm, tLoginForm){
+
     var collectionOfUser, userId, form, addForm, updateForm, confirmForm, warningForm, loginForm, registrationForm;
 
     /**
@@ -493,6 +495,8 @@
     * set forms and display date from server
     */
     $(function(){
+
+        
         collectionOfUser = new MyCollection('http://localhost:3000/user');
         loginAndPassword = new MyCollection('http://localhost:3000/loginAndPassword');
 
@@ -516,7 +520,7 @@
             }
             registrationForm.show(300);
         });  
-
+        console.log('work');
         collectionOfUser.load(
             function(data){
                 for(var i = 0; i<data.length; i++){
@@ -539,4 +543,4 @@
             }
         );
     });
-})(jQuery); 
+});

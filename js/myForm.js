@@ -1,4 +1,4 @@
-(function(){
+define(['logic'], function(logic){
 
     /**
     * Creates object MyForm.
@@ -15,7 +15,8 @@
         */
         this.templateForm = tString;
         this.obj = obj;
-        this.form = template(this.templateForm, this.obj);
+
+        this.form = logic.template(this.templateForm, this.obj);
 
         /**
         * Add buttons tp form with listeners. 
@@ -92,8 +93,8 @@
             }
         }
     }
-    window.MyForm = MyForm;
-}());
+    return MyForm ;
+});
 
 
 
