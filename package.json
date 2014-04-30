@@ -1,13 +1,17 @@
-{ "name": "ToDo"
-, "version": "0.0.1"
-, "description": "Program allows you to record tasks and carry out simple activities with them, such as:  set the status, delete, add new tasks and ather."
-, "main": "index.html"
-, "author": "Rostyslav Paslavskyy <pas.ros.bor@gmail.com>"
-, "license": ""
-, "dependencies":
-  { "restify": "~2.6.0",
-  	"save": "0.0.19",
-  	"express": "3.0",
-  	"save-json":"0.2.0"
+{
+  "name": "ToDo",
+  "version": "0.0.1",
+  "description": "Program allows you to record tasks and carry out simple activities with them, such as:  set the status, delete, add new tasks and ather.",
+  "main": "index.html",
+  "author": "Rostyslav Paslavskyy <pas.ros.bor@gmail.com>",
+  "license": "",
+  "dependencies": {
+    "restify": "~2.6.0",
+    "save": "0.0.19",
+    "express": "3.0",
+    "save-json": "0.2.0"
+  },
+  "devDependencies": {
+    "bower": "^1.3.3"
   }
 }

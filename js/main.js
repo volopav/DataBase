@@ -1,5 +1,5 @@
-define(['myForm', 'MyCollection', 'templateOfDOM'], 
-    function ( MyCollection, MyForm,  tActionButtons, tColumOfTable, tFirstRow, tAlertForm, tConfirmForm, tNewForm, tLoginForm){
+require(['js/myForm', 'js/MyCollection', 'js/templateOfDOM', 'jquery', 'jquery.validate'], 
+    function (MyForm, MyCollection, templates){
 
     var collectionOfUser, userId, form, addForm, updateForm, confirmForm, warningForm, loginForm, registrationForm;
 
@@ -500,12 +500,12 @@ define(['myForm', 'MyCollection', 'templateOfDOM'],
         collectionOfUser = new MyCollection('http://localhost:3000/user');
         loginAndPassword = new MyCollection('http://localhost:3000/loginAndPassword');
 
-        addForm = new MyForm( tNewForm );
-        registrationForm = new MyForm( tNewForm );
-        updateForm = new MyForm( tNewForm );
-        confirmForm = new MyForm( tConfirmForm );
-        warningForm = new MyForm( tAlertForm );
-        loginForm = new MyForm( tLoginForm );
+        addForm = new MyForm( templates.tNewForm );
+        registrationForm = new MyForm( templates.tNewForm );
+        updateForm = new MyForm( templates.tNewForm );
+        confirmForm = new MyForm( templates.tConfirmForm );
+        warningForm = new MyForm( templates.tAlertForm );
+        loginForm = new MyForm( templates.tLoginForm );
         $('#loggedOut').css('background', '#ADD8E6');
         $('#login').on('click', function(){
                 if(!loginForm.form.find('button').length){

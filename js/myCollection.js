@@ -1,4 +1,4 @@
-define(['logic'], function(reqRes) {
+define(['js/logic'], function(reqRes) {
 
     /**
     * Creates object MyCollection.

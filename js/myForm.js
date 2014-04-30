@@ -1,4 +1,4 @@
-define(['logic'], function(logic){
+define(['js/logic'], function(logic){
 
     /**
     * Creates object MyForm.
