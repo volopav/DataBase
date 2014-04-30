@@ -22,7 +22,7 @@
             var that = this;
             reqRes(that.url, function(text){ 
                 that.collection = JSON.parse(text); 
-                callback(that.collection);
+                callback(JSON.parse(text));
             });
         };
 
@@ -55,7 +55,7 @@
         this.changeInCollection = function( obj) {
             for( var i = 0 ; i < this.collection.length; i++)
             { 
-                if(this.collection[i]._id === obj._id)
+                if(this.collection[i].id === obj.id)
                 {
                     this.collection[i] = obj;
                 }
@@ -92,7 +92,7 @@
         this.deleteInColection = function( id ){
             for( var i = 0 ; i < this.collection.length; i++)
             { 
-                if(this.collection[i]._id === id)
+                if(this.collection[i].id === id)
                 {
                     this.collection.splice(i, 1);
                 }
@@ -110,7 +110,7 @@
             reqRes(
                 that.url,
                 function(){
-                    that.deleteInColection(obj._id);
+                    that.deleteInColection(obj.id);
                     callback();
                 },
                 errorCallback,
@@ -128,7 +128,7 @@
         */
         this.getElementById = function( id ){
             for( var i = 0 ; i < this.collection.length; i++){ 
-                if(this.collection[i]._id === id)
+                if(parseInt(this.collection[i]['id']) === parseInt(id))
                 {
                     return this.collection[i];
                 }

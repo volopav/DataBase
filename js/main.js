@@ -36,7 +36,6 @@
                 createUpdateForm();
             }
             if(userId){
-                console.log(userId);
                 updateForm.setValueForm(
                     collectionOfUser.getElementById(userId)
                 );
@@ -107,6 +106,9 @@
         var val = addForm.form.find('#myForm').valid();
         if(val){
             var user = addForm.getValueForm();
+            console.log(user);
+            user.logIN = false;
+            console.log(user);
             e.preventDefault();
             collectionOfUser.create(
                 user,
@@ -128,6 +130,7 @@
         var val = registrationForm.form.find('#myForm').valid();
         if(val){
             var user = registrationForm.getValueForm();
+            user.logIN = false;
             e.preventDefault();
             collectionOfUser.create(
                 user,
@@ -143,14 +146,14 @@
     */
     function updateUser(e){
         var user = updateForm.getValueForm();
-        user["_id"] = userId;
+        user["id"] = userId;
         var val = updateForm.form.find('#myForm').valid();
         if(val){
             e.preventDefault();
             collectionOfUser.update(
                 user,
                 function(newUser){
-                    $('tr[data-id='+userId +']').html('').html(template(tColumOfTable, JSON.parse(newUser)))
+                    $('tr[data-id='+userId +']').html('').html(template(tColumOfTable, newUser))
                     $('tr[data-id='+userId +']').on('click', select);
                     updateForm.hide();
                 },
@@ -178,6 +181,20 @@
     * log out the user and give him status logged= false, hide all date show login form.
     */
     function logout (){
+        collectionOfUser.collection.forEach(function(item){
+            if(item.logIN){
+                collectionOfUser.update(
+                    {
+                        id : item.id,
+                        logIN : false,
+                    },
+                    function(){},
+                    error
+                );
+            }
+        })
+        $('#loggedOut').unbind();
+        $('#loggedOut').css('background', '#E6E6FA');
         $('#onSite').remove();
         $('#actionButtons').html('');
         $('#dbOfUser').html('');
@@ -199,6 +216,9 @@
                 password : password,
             },
             function (user){
+                $('#loggedOut').on('click', logout);
+                $('#loggedOut').removeAttr('style');
+                var userIdForUpdate;
                 loginForm.hide();
                 createActionButtons();
                 var onSite = $('<div></div>').attr({
@@ -207,16 +227,29 @@
                 $('body').append(onSite);
 
                 if( user.length > 0 ){
+                    userIdForUpdate = user[0].id;
+                    user[0].logIN = true;
                     $('#onSite').text('Welcome,' + user[0].name + ' on our site');
                        createTable(user);
                 }
                 else{
+                    userIdForUpdate = user.id;
+                    user.logIN = true;
                 $('#onSite').text('Welcome,' + user.name + ' on our site');
                     $('#addUser').remove();
                     $('#delUser').remove();
                     createTable([]);
                     $('#db').append( createNewRow(user) ); 
                 }
+
+                collectionOfUser.update(
+                    {
+                        id : userIdForUpdate,
+                        logIN : true,
+                    },
+                    function(){},
+                    error
+                );
             },
             error
         );     
@@ -462,13 +495,14 @@
     $(function(){
         collectionOfUser = new MyCollection('http://localhost:3000/user');
         loginAndPassword = new MyCollection('http://localhost:3000/loginAndPassword');
+
         addForm = new MyForm( tNewForm );
         registrationForm = new MyForm( tNewForm );
         updateForm = new MyForm( tNewForm );
         confirmForm = new MyForm( tConfirmForm );
         warningForm = new MyForm( tAlertForm );
         loginForm = new MyForm( tLoginForm );
-        $('#loggedOut').on('click', logout);
+        $('#loggedOut').css('background', '#ADD8E6');
         $('#login').on('click', function(){
                 if(!loginForm.form.find('button').length){
                     createLoginForm();
@@ -482,5 +516,27 @@
             }
             registrationForm.show(300);
         });  
+
+        collectionOfUser.load(
+            function(data){
+                for(var i = 0; i<data.length; i++){
+                    if(data[i].logIN){
+                        $('#loggedOut').on('click', logout);
+                        $('#loggedOut').removeAttr('style');
+                        createActionButtons();
+                        $('#onSite').text('Welcome,' + data[i].name + ' on our site');
+                        if(data[i].login === 'admin'){
+                            createTable(data);
+                        }
+                        else{
+                            $('#addUser').remove();
+                            $('#delUser').remove();
+                            createTable([]);
+                            $('#db').append(createNewRow(data[i]));
+                        }
+                    }
+                }
+            }
+        );
     });
 })(jQuery); 
